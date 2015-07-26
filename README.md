@@ -25,6 +25,6 @@ These features include:
  - Multiple project management
  - Globalisation and multilanguage
  - Super speed
-and much much more...
+ - and much much more...
 
 Visit <a href="http://xenium.org" target="_blank">**Xenium CMS**</a> to learn more.

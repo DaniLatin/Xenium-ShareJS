@@ -1,7 +1,9 @@
 # Xenium ShareJS
 
 This is a modified version of ShareJS, created by <a href="http://josephg.com/" target="_blank">Joseph Gentle</a>.
-This modification will allow you to easily install ShareJS on Heroku and enable live concurrent editing in <a href="http://xenium.org">Xenium CMS</a>.
+This modification will allow you to easily install ShareJS on *Heroku* and enable live concurrent editing in <a href="http://xenium.org">*Xenium CMS*</a>.
+
+The server runs on NodeJS and the client works in NodeJS or a web browser.
 
 ### ShareJS
 

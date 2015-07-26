@@ -17,7 +17,7 @@ GitHub repository of the original project:
 
 ### Xenium CMS
 
-<a href="http://xenium.org" target="_blank">Xenium CMS</a> is an upcoming CMS and framework with some of the unseen features before.
+<a href="http://xenium.org" target="_blank">Xenium CMS</a> is an upcoming OpenSource CMS and framework with some of the unseen features before.
 
 These features include:
  - Collaborative real-time content editing

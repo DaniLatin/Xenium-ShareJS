@@ -27,4 +27,4 @@ These features include:
  - Super speed
  - and much much more...
 
-Visit <a href="http://xenium.org" target="_blank">**Xenium CMS**</a> to learn more.
+Visit <a href="http://xenium.org" target="_blank">Xenium CMS</a> to learn more about the project.

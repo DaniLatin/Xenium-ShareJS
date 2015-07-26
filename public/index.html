@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <script src="http://ajaxorg.github.com/ace/build/src/ace.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/channel/bcsocket.js"></script>
+    <script src="/share/share.js"></script>
+    <script src="/share/ace.js"></script>
+    <script src="/share/textarea.js"></script>
+    <script src="/js/diff_match_patch.js"></script>
+    <script>
+        $(document).ready(function() {
+            var editor = ace.edit("editor");
+            var elem = document.getElementById('editor_input');
+            
+            var poskus = document.getElementById('poskus');
+            
+            var contenteditable = document.getElementById('contenteditable');
+            
+            var check = document.getElementById('check');
+            var checker = document.getElementById('checker');
+
+            sharejs.open('hello', 'text', 'http://newsharejs-dani.herokuapp.com/channel', function (error, doc) {
+                doc.attach_ace(editor);
+                //doc.attach_textarea(elem);
+            });
+            
+            sharejs.open('hello2', 'text', 'http://newsharejs-dani.herokuapp.com/channel', function (error, doc) {
+                //doc.attach_ace(editor);
+                doc.attach_textarea(elem);
+                
+                $("#clicker").on('click', function() {
+                    console.log('triggered');
+                    /*var new_text = $("#editor_input").val() + " krneeeeeki tko";
+                    $("#editor_input").val(new_text);*/
+                    doc.insert(0, 'neki tko');
+                    //doc.keyup();
+                });
+                
+            });
+            
+            sharejs.open('poskus', 'text', 'http://newsharejs-dani.herokuapp.com/channel', function (error, doc) {
+                //doc.attach_ace(editor);
+                doc.attach_textarea(poskus);
+                
+                window.document = doc;
+                
+                console.log(window.conlog);
+                
+                
+                doc.on('remoteop', function(op) {
+                    console.log(op);
+                    if($("#poskus").val() != $("#contenteditable").html()){
+                        console.log('Version: ' + doc.version);
+                        matchit_reverse();
+                    }
+                });
+                
+                $("#poskus").on('change', function() {
+                    console.log("change triggered");
+                });
+                
+                $("#clicker").on('click', function() {
+                    console.log('triggered');
+                    /*var new_text = $("#editor_input").val() + " krneeeeeki tko";
+                    $("#editor_input").val(new_text);*/
+                    doc.insert(0, 'neki tko');
+                    //doc.keyup();
+                });
+                
+            });
+            
+            
+            /*
+            sharejs.open('contenteditable', 'text', 'http://newsharejs-dani.herokuapp.com/channel', function (error, doc) {
+                //doc.attach_ace(editor);
+                doc.attach_textarea(contenteditable);
+            });
+            */
+            
+            sharejs.open('hello3', 'text', 'http://newsharejs-dani.herokuapp.com/channel', function (error, doc) {
+                //doc.attach_ace(editor);
+                doc.attach_textarea(check);
+            });
+            
+            sharejs.open('hello4', 'text', 'http://newsharejs-dani.herokuapp.com/channel', function (error, doc) {
+                //doc.attach_ace(editor);
+                doc.attach_textarea(checker);
+            });
+        });
+        
+        
+        /*
+        var elem = document.getElementById('editor');
+        
+        sharejs.open('hello', 'text', function(error, doc) {
+        	if (error) {
+        		console.log(error);
+        	} else {
+        		elem.disabled = false;
+        		doc.attach_textarea(elem);
+        	}
+        });
+        */
+    </script>
+    
+    <style>
+        #editor {
+            width: 200px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>neki tko
+<div id="editor"></div>
+<input id="editor_input" onkeyup="nekaj()" />
+<input id="check" type="checkbox" value="y" />
+<input id="checker" type="checkbox" value="yes" />
+
+<textarea id="poskus" onkeyup="matchit_reverse()"></textarea>
+<div id="contenteditable" style="height: 300px; width: 500px; border: 1px solid black;" contenteditable="true" onkeyup="matchit()"></div>
+<button id="clicker" >button</button>
+
+<div id="diffoutputdiff"></div>
+
+<script type="text/javascript">
+
+var dmp = new diff_match_patch();
+var patch_text = '';
+var patch_text2 = '';
+
+function sharit(diffs){
+    sharejs.open('poskus', 'text', 'http://newsharejs-dani.herokuapp.com/channel', function (error, doc) {
+    
+    window.insert_point = undefined;
+    window.text_to_insert = undefined;
+    window.text_to_remove = undefined;
+    
+    //doc.attach_textarea(poskus);
+    $.each(diffs[0]['diffs'], function(i, item) {
+        console.log(diffs[0]['diffs'][i]);
+        
+        //var insert_point = undefined;
+        //var text_to_insert = undefined;
+        
+        console.log(diffs[0]['diffs'][0][1].length);
+        
+        if (diffs[0]['diffs'][i][0] == 0  && i == 0){ //console.log("i=0");
+            window.insert_point = diffs[0]['start1'] + diffs[0]['diffs'][0][1].length;
+        } else if (diffs[0]['diffs'][i][0] == -1  && i == 0){
+            window.insert_point = diffs[0]['start1'];
+        }
+        
+        /* else {
+            insert_point = diffs[0]['start1'];
+        }*/
+        
+        if (diffs[0]['diffs'][i][0] == -1)
+        {
+            window.text_to_add = diffs[0]['diffs'][i][1];
+        }
+        /*
+        if (insert_point != undefined && text_to_add != undefined){
+            console.log("position: " + insert_point + " text: " + text_to_add);
+            doc.insert(insert_point, text_to_add);
+            
+            insert_point = undefined;
+            text_to_insert = undefined;
+        }
+        */
+        //doc.insert(0, diffs[0][1]);
+    });
+    
+    if (window.insert_point != undefined && window.text_to_add != undefined){
+        console.log("position: " + window.insert_point + " text: " + window.text_to_add);
+        doc.insert(window.insert_point, window.text_to_add);
+        
+        window.insert_point = undefined;
+        window.text_to_insert = undefined;
+        window.text_to_remove = undefined;
+    }
+    
+    });
+}
+
+function matchit()
+{
+    //var text1 = document.getElementById('contenteditable').innerHTML;
+    var text1 = $('#contenteditable').html().replace("'", "&#39;").replace('"', "&quot;");
+    var text2 = document.getElementById('poskus').value;
+    //var text2 = $('#poskus').html();
+    var patches = dmp.patch_fromText(patch_text);
+    
+    var diff = dmp.diff_main(text1, text2, true);
+    
+    var ms_start = (new Date).getTime();
+    var results = dmp.patch_apply(patches, text1);
+    var ms_end = (new Date).getTime();
+    
+    document.getElementById('poskus').value = results[0];
+    
+    var patch_list = dmp.patch_make(text1, text2, diff);
+    patch_text2 = dmp.patch_toText(patch_list);
+    
+    if (patch_list[0] != undefined && patch_list[0]["diffs"] != undefined){
+        console.log(patch_list[0]["diffs"]);
+        
+        //sharit(patch_list[0]["diffs"]);
+        sharit(patch_list);
+    }
+    
+    document.getElementById('diffoutputdiff').innerHTML =
+      '<FIELDSET><LEGEND>Patch:</' + 'LEGEND><PRE>' + patch_text2 +
+      '</' + 'PRE></' + 'FIELDSET>';
+      
+    
+}
+
+function matchit_reverse()
+{ console.log("onchange triggered");
+    var text1 = document.getElementById('poskus').value;
+    var patches = dmp.patch_fromText(patch_text);
+    
+    var ms_start = (new Date).getTime();
+    var results = dmp.patch_apply(patches, text1);
+    var ms_end = (new Date).getTime();
+    
+    document.getElementById('contenteditable').innerHTML = results[0];
+}
+
+$( "#poskus" ).change(function() {
+    console.log( "Handler for .change() called." );
+});
+
+</script>
+
+</body>
+</html>
